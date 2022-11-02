@@ -8,7 +8,7 @@ import java.util.Stack;
 // Team: DN Red
 // TA: Rahul Konchada
 // Lecturer: Florian Heimerl
-// Notes to Grader:
+// Notes to Grader: 
 
 /**
  * Red-Black Tree implementation with a Node inner class for representing
@@ -430,62 +430,63 @@ public class RedBlackTree<T extends Comparable<T>> {
   // You can run your tests by commenting in the calls to the test methods
 
   // simple right rotation
-  public static boolean test1() {
-    RedBlackTree redBlackTree = new RedBlackTree();
-    redBlackTree.insert(5);
-    redBlackTree.insert(9);
-    redBlackTree.insert(3);
-    redBlackTree.insert(2);
-    redBlackTree.insert(4);
+  // public static boolean test1() {
+  // RedBlackTree redBlackTree = new RedBlackTree();
+  // redBlackTree.insert(5);
+  // redBlackTree.insert(9);
+  // redBlackTree.insert(3);
+  // redBlackTree.insert(2);
+  // redBlackTree.insert(4);
 
-    redBlackTree.rotate(redBlackTree.root.leftChild, redBlackTree.root);
-    String toLvlOrder = redBlackTree.toLevelOrderString();
+  // redBlackTree.rotate(redBlackTree.root.leftChild, redBlackTree.root);
+  // String toLvlOrder = redBlackTree.toLevelOrderString();
 
-    if (!toLvlOrder.equals("[ 3, 2, 5, 4, 9 ]")) {
-      System.out.println("Rotation Failed");
-      return false;
-    }
-    return true;
-  }
+  // if (!toLvlOrder.equals("[ 3, 2, 5, 4, 9 ]")) {
+  // System.out.println("Rotation Failed");
+  // return false;
+  // }
+  // return true;
+  // }
 
-  // left rotation at root
-  public static boolean test2() {
-    RedBlackTree redBlackTree = new RedBlackTree();
-    redBlackTree.insert(8);
-    redBlackTree.insert(6);
-    redBlackTree.insert(10);
-    redBlackTree.insert(9);
-    redBlackTree.insert(12);
+  // // left rotation at root
+  // public static boolean test2() {
+  // RedBlackTree redBlackTree = new RedBlackTree();
+  // redBlackTree.insert(8);
+  // redBlackTree.insert(6);
+  // redBlackTree.insert(10);
+  // redBlackTree.insert(9);
+  // redBlackTree.insert(12);
 
-    redBlackTree.rotate(redBlackTree.root.rightChild, redBlackTree.root);
-    String toLvlOrder = redBlackTree.toLevelOrderString();
+  // redBlackTree.rotate(redBlackTree.root.rightChild, redBlackTree.root);
+  // String toLvlOrder = redBlackTree.toLevelOrderString();
 
-    if (!toLvlOrder.equals("[ 10, 8, 12, 6, 9 ]")) {
-      System.out.println("Rotation Failed");
-      return false;
-    }
-    return true;
-  }
+  // if (!toLvlOrder.equals("[ 10, 8, 12, 6, 9 ]")) {
+  // System.out.println("Rotation Failed");
+  // return false;
+  // }
+  // return true;
+  // }
 
-  // long chain to the right
-  public static boolean test3() {
-    RedBlackTree redBlackTree = new RedBlackTree();
-    redBlackTree.insert(5);
-    redBlackTree.insert(6);
-    redBlackTree.insert(7);
-    redBlackTree.insert(8);
-    redBlackTree.insert(3);
+  // // long chain to the right
+  // public static boolean test3() {
+  // RedBlackTree redBlackTree = new RedBlackTree();
+  // redBlackTree.insert(5);
+  // redBlackTree.insert(6);
+  // redBlackTree.insert(7);
+  // redBlackTree.insert(8);
+  // redBlackTree.insert(3);
 
-    redBlackTree.rotate(redBlackTree.root.rightChild.rightChild, redBlackTree.root.rightChild);
-    String toLvlOrder = redBlackTree.toLevelOrderString();
+  // redBlackTree.rotate(redBlackTree.root.rightChild.rightChild,
+  // redBlackTree.root.rightChild);
+  // String toLvlOrder = redBlackTree.toLevelOrderString();
 
-    if (!toLvlOrder.equals("[ 5, 3, 7, 6, 8 ]")) {
-      System.out.println("Rotation Failed");
-      return false;
-    }
+  // if (!toLvlOrder.equals("[ 5, 3, 7, 6, 8 ]")) {
+  // System.out.println("Rotation Failed");
+  // return false;
+  // }
 
-    return true;
-  }
+  // return true;
+  // }
 
   /**
    * Main method to run tests. Comment out the lines for each test
@@ -494,9 +495,7 @@ public class RedBlackTree<T extends Comparable<T>> {
    * @param args
    */
   public static void main(String[] args) {
-    System.out.println("Test 1 passed: " + test1());
-    System.out.println("Test 2 passed: " + test2());
-    System.out.println("Test 3 passed: " + test3());
+
   }
 
 }
