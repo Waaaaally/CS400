@@ -1,0 +1,150 @@
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * This class provides the text based UI of the application. It interacts with the user and calls methods
+ * to search by a word in the title, search by ISBN, and set author's name as filter.
+ */
+public class BookMapperFrontend implements IBookMapperFrontend
+{
+    private Scanner userInputScanner;
+    private IBookMapperBackend backend;
+    private IISBNValidator validator;
+
+    /**
+     * Creates a new object of type BookMapperFrontend and populates the instance variables.
+     * @param userInputScanner the Scanner object to take input from System.in
+     * @param backend the IBookMapperBackend object to implement the searching of the hashtable
+     * @param validator the IISBNValidator object to check if the ISBN value taken from System.in is valid
+     */
+    BookMapperFrontend(Scanner userInputScanner, IBookMapperBackend backend, IISBNValidator validator)
+    {
+        this.userInputScanner = userInputScanner;
+        this.backend = backend;
+        this.validator = validator;
+    }
+
+    /**
+     * Runs a loop which keeps displaying the main menu until the user chooses to terminate the program.
+     * Accepts input from the user and calls required methods based on it.
+     */
+    @Override
+    public void runCommandLoop()
+    {
+        String choice;
+
+        System.out.println("Welcome to the Book Mapper Application!");
+        System.out.println("***************************************");
+
+        while(true)
+        {     
+            displayMainMenu();
+            choice = userInputScanner.nextLine();
+
+            if(choice.equals("1"))
+                isbnLookup();
+            else if(choice.equals("2"))
+                titleSearch();
+            else if(choice.equals("3"))
+                setFilter();
+            else if(choice.equals("4"))
+            {
+                System.out.println("\nThe application has been terminated.");
+                return;
+            }
+            else
+                System.out.println("\nPlease enter a valid option.");
+        }
+    }
+
+    /**
+     * Prints to System.out the menu of options that can be selected.
+     */
+    @Override
+    public void displayMainMenu()
+    {
+        System.out.println("\nYou are in the Main Menu:");
+        System.out.println("Press 1 to search for book using its ISBN");
+        System.out.println("Press 2 to search for book using its title");
+        System.out.println("Press 3 to set a filter using the author's name");
+        System.out.println("Press 4 to exit the application\n");
+    }
+
+    /**
+     * Displays the title, author and ISBN of the books. If no books are found, prints a message saying so.
+     * @param books the List containing IBook objects to be displayed
+     */
+    @Override
+    public void displayBooks(List<IBook> books)
+    {
+        System.out.println();
+
+        if(books.isEmpty())
+        {
+            System.out.println("Sorry! The book you're searching for is not available.");
+            return;
+        }
+
+        for(int i=0; i<books.size(); i++)
+            System.out.println(i+1 + ". \"" + books.get(i).getTitle() + "\" by " + books.get(i).getAuthors() + ", ISBN: " + books.get(i).getISBN13());
+    }
+
+    /**
+     * Takes the ISBN of the book from System.in, checks whether the ISBN is valid, and then
+     * displays the book needed.
+     */
+    @Override
+    public void isbnLookup()
+    {
+        System.out.println("\nYou are in the ISBN Search Menu:");
+        System.out.print("Enter the ISBN of the book: ");
+        String isbn = userInputScanner.nextLine();
+
+        if(validator.validate(isbn))
+            displayBooks(Arrays.asList(backend.getByISBN(isbn)));
+        else
+            System.out.println("\nThe ISBN you've entered is invalid.");
+    }
+    
+    /**
+     * Takes a word in the book title from System.in, and displays all the books containing
+     * that word in their titles.
+     */
+    @Override
+    public void titleSearch()
+    {
+        System.out.println("\nYou are in the Title Search Menu:");
+        System.out.print("Enter a word to search for in book titles (leave empty for all books): ");
+        List<IBook> books = backend.searchByTitleWord(userInputScanner.nextLine());
+
+        //printing the filter match statement
+        String authString = backend.getAuthorFilter();
+        authString = authString == null ? "(any author)" : "(author filter: " + authString + ")";
+        System.out.println("\nMatches " + authString + " " + books.size() + " of " + backend.getNumberOfBooks());
+
+        displayBooks(books);
+    }
+
+    /**
+     * Displays the current filter, takes the new filter from System.in, and sets it as the current filter
+     */
+    public void setFilter()
+    {
+        System.out.println("\nYou are in the Set Author Filter Menu:");
+
+        String currentFilter = backend.getAuthorFilter();
+        if(currentFilter == null)
+            currentFilter = "none";
+
+        System.out.println("Author name must currently contain: " + currentFilter);
+        System.out.print("Enter a string for author names to contain (leave empty to get books from all authors): ");
+
+        String newFilter = userInputScanner.nextLine();
+
+        if(newFilter.equals(""))
+            backend.resetAuthorFilter();
+        else
+            backend.setAuthorFilter(newFilter);
+    }
+}
