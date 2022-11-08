@@ -17,14 +17,14 @@ public interface IMovieRentalBackend {
    *
    * @param word - substring that is used to find a specific movie
    */
-  public void rentMovie(String word);
+  public IMovie rentMovie(String word); //CHANGED FROM VOID TO IMOVIE RETURN TYPE
 
   /**
    * adds back the movie into the available red black tree and removes it from the rented tree
    *
    * @param word - substring that is used to find a specific movie
    */
-  public void returnMovie(String word);
+  public IMovie returnMovie(String word); //CHANGED FROM VOID TO IMOVIE RETURN TYPE
 
   /**
    * removes a movie from the available and/or rented red black tree

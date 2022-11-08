@@ -17,7 +17,7 @@ public interface IMovieRentalFrontend {
 
   public void displayMainMenu(); // prints command options to System.out
 
-  public void printAllByCategory(List<IMovie> movies); // display a list of movies
+  public void printAllByCategory(); // display a list of movies
 
   // reads movie from System.in, if movie is in Free tree transfer it to Rented tree
   public void rentMovie();
