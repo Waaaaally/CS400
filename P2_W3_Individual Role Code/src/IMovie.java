@@ -6,7 +6,6 @@
  */
 
 public interface IMovie {
-
   /**
    * Returns the title of the movie.
    * @return title of the movie.

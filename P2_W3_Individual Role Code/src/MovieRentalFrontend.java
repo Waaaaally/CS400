@@ -5,47 +5,45 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MovieRentalFrontend implements IMovieRentalFrontend {
-
-  MovieRentalBackend backend = new MovieRentalBackend();
+  Scanner scanner = new Scanner(System.in);
+  MovieRentalBackendPH backend = new MovieRentalBackendPH();
 
   @Override
   public void runCommandLoop() {
-    Scanner scanner = new Scanner(System.in);
-    int optionInput = -1;
+    String optionInput;
 
     System.out.println("Welcome to the Movie Rental App");
     System.out.println("===================================");
 
-    while (optionInput != 5){
+    while (true){
+//      Scanner scanner = new Scanner(System.in);
       displayMainMenu();
 
-      optionInput = scanner.nextInt();
+      optionInput = scanner.nextLine();
 
-      while (optionInput <= 0 || optionInput > 5) { //Sanity Checking
-        System.out.println("Please enter a number listed on the menu");
-        optionInput = scanner.nextInt();
-      }
-    
-      if (optionInput == 1) {
+      if (optionInput.equals("1")) {
         printAllByCategory();
-      } else if (optionInput == 2) {
+      } else if (optionInput.equals("2")) {
         rentMovie();
-      } else if (optionInput == 3) {
+      } else if (optionInput.equals("3")) {
         returnMovie();
-      } else if (optionInput == 4) {
+      } else if (optionInput.equals("4")) {
         removeMovie();
-      } else if (optionInput == 5) {
-        save();
+      } else if (optionInput.equals("5")) {
+        //save(); need movie list to test
+        scanner.close();
+        System.out.println("Thank you for using the Movie Rental App!");
+        return;
+      }else{
+        System.out.println("Please enter a valid option.\n");
       }
+      //Loop continues
     }
-    System.out.println();
-    scanner.close();
   }
 
   @Override
   public void displayMainMenu() {
-    System.out.println(
-      "\t" + "You are in the Main Menu: Select an option by entering a number"
+    System.out.println("You are in the Main Menu: Select an option by entering a number"
     );
     System.out.println("\t" + "1) Display Movies by Genre");
     System.out.println("\t" + "2) Rent a Movie");
@@ -56,10 +54,12 @@ public class MovieRentalFrontend implements IMovieRentalFrontend {
 
   @Override
   public void printAllByCategory() { //changed to no arg
-    List<String> genres = Arrays.asList("Drama", "Comedy", "Romance", "Animation", "Action", "Fantasy");
-    Scanner scanner = new Scanner(System.in);
+    List<String> genres = Arrays.asList("Drama", "drama", "Comedy", "comedy", "Romance", "romance",
+            "Animation", "animation", "action", "Action", "Fantasy", "fantasy");
+//    Scanner scanner = new Scanner(System.in);
 
     System.out.println("What genre do you want listed? (Drama, Comedy, Romance, Animation, Action, Fantasy)");
+
     String sInput = scanner.nextLine();
 
     while (!genres.contains(sInput)) { //todo Case Sensitivity?
@@ -68,80 +68,83 @@ public class MovieRentalFrontend implements IMovieRentalFrontend {
     }
     List<IMovie> movies = backend.searchByMovieGenre(sInput);
 
-    System.out.println("The movies in the genre," + sInput + " are as follows:");
+    System.out.println("The movies in the genre, " + sInput + ", are as follows:");
     
     for (IMovie movie : movies) {
         System.out.println(movie.getTitle());
     }
-
-    scanner.close();
+    System.out.println();
   }
 
   @Override
   public void rentMovie() {
-    Scanner scanner = new Scanner(System.in);
+//    Scanner scanner = new Scanner(System.in);
     System.out.println("What is the name of the movie you want to rent?");
-    String sInput = scanner.nextLine();
+    String sInput = null;
+
+    sInput = scanner.nextLine();
 
     IMovie rentedMovie = backend.rentMovie(sInput); //todo Changed return type from void to IMovie. Communicate
-    if (rentedMovie == null) { //null if not found? Must communicate
-      System.out.println(
-        "Movie wasn't found. Are you sure that was the correct name? Please re-enter it. "
-      );
-      sInput = scanner.nextLine();
-      rentedMovie = backend.rentMovie(sInput);
+
+    if(rentedMovie != null){
+      System.out.println(sInput + " has been rented! Please enjoy.\n");
+      return;
+    }else{
+      System.out.println("Sorry, we couldn't find that movie in our database.\n");
     }
-    //Should no long be null @ this point
-    System.out.println(sInput + " has been rented! Please enjoy.");
-    scanner.close();
   }
 
   @Override
   public void returnMovie() {
-    Scanner scanner = new Scanner(System.in);
+//    Scanner scanner = new Scanner(System.in);
 
     System.out.println("What is the name of the movie you want to return?");
     String sInput = scanner.nextLine();
 
     IMovie returnedMovie = backend.returnMovie(sInput);
-    if (returnedMovie == null) {
-      System.out.println(
-        sInput + " has not been rented out, so it can’t be returned."
-      );
-      sInput = scanner.nextLine();
-      returnedMovie = backend.returnMovie(sInput);
+    if(returnedMovie != null){
+      System.out.println("Thank you for returning " + sInput + "!\n");
+      return;
+    }else{
+      System.out.println("That movie hasn't been rented in our database, so it can't be marked " +
+              "for return.\n");
     }
-
-    System.out.println("Thank you for returning " + sInput + "!");
-    scanner.close();
   }
 
   @Override
   public void removeMovie() {
-    Scanner scanner = new Scanner(System.in);
+//    Scanner scanner = new Scanner(System.in);
+    IMovie removedMovie = null;
 
     System.out.println(
-      "What movie do you want to remove? Warning: This is permanent "
-    );
+      "What movie do you want to remove? Warning: This is permanent.");
+
     String sInput = scanner.nextLine();
 
     System.out.println("Are you sure? (y/n)?");
-    char yesNo = scanner.nextLine().charAt(0);
 
-    if (yesNo == 'y') {
-      IMovie removedMovie = backend.removeMovie(sInput);
+    String yesNo = scanner.nextLine();
 
-      if (removedMovie == null) {
-        System.out.println(
-          sInput +
-          " ins't in our list of removable movies. Are you sure of its title?"
-        );
-        sInput = scanner.nextLine();
-        removedMovie = backend.removeMovie(sInput);
-      }
-      System.out.println(sInput + " has been removed from the catalog");
+    if (yesNo.equals("y")) {
+      System.out.println("Okay, proceeding with deletion.");
+      removedMovie = backend.removeMovie(sInput);
     }
-    scanner.close();
+    else if(yesNo.equals("n")){
+      System.out.println("Okay, returning to main menu.\n");
+      return;
+    }else{
+      System.out.println("Command unrecognized. Returning to main menu.\n");
+      return;
+    }
+
+    if(removedMovie != null){
+      System.out.println(sInput + " has been removed from the catalog.\n");
+      return;
+    }
+    else{
+      System.out.println("That movie wasn't in our database so we couldn't remove it.\n");
+    }
+
   }
 
   @Override
@@ -184,3 +187,40 @@ public class MovieRentalFrontend implements IMovieRentalFrontend {
     return movies;
   }
 }
+
+/*
+while (rentedMovie == null) { //null if not found? Must communicate
+      System.out.println(
+        "Movie wasn't found. Are you sure that was the correct name? Please re-enter it. Or type " +
+                "\"q\" to return to main menu.");
+      sInput = scanner.nextLine();
+      if(sInput.equals("q")){
+        rentedMovie = new Movie();
+      }
+      else{
+        rentedMovie = backend.rentMovie(sInput);
+      }
+    }
+
+while (returnedMovie != null || !sInput.equals("q")) {
+      System.out.println(
+        sInput + " has not been rented out, so it can’t be returned. Please retype correctly or " +
+                "enter \"q\" to return to the main menu.");
+
+      sInput = scanner.nextLine();
+      returnedMovie = backend.returnMovie(sInput);
+    }
+    if(returnedMovie == null)
+      return;
+
+
+if(removedMovie != null || !sInput.equals("q")) {
+        System.out.println(
+          sInput + " isn't in our list of removable movies. Are you sure of its title? Please retype " +
+                  "correctly or enter \"q\" to return to the main menu.");
+        sInput = scanner.nextLine();
+        removedMovie = backend.removeMovie(sInput);
+      }
+      if(removedMovie == null)
+        return;
+ */
