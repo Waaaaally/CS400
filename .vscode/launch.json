@@ -4,6 +4,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
+        {
+            "type": "java",
+            "name": "Launch DessertGame",
+            "request": "launch",
+            "vmArgs": "--module-path /Applications/javafx-sdk-19/lib/ --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "DessertGame",
+            "projectName": "CS400_161af72c"
+        },
         {
             "type": "java",
             "name": "Launch FrontendDeveloperTests",
