@@ -40,7 +40,7 @@ public class DessertGame extends Application {
         //Step 6.5 random object creation
         Random random = new Random();
 
-        // TODO: Step 7-10
+        //Step 7 - 10
         Button[] buttons = new Button[8];
         Button dessertButton = new Button("Dessert");
         
