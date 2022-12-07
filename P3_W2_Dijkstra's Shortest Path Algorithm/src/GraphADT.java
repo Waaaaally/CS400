@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  * @param NodeType the data type stored at each graph vertex
  * @param EdgeType the data type stored at each graph edge as a Number whose doubleValue() method returns a value >=0.0
  */
-public interface GraphADT<NodeType,EdgeType extends Number> { 
+public interface GraphADT <NodeType,EdgeType extends Number> { 
     
     /**
      * Insert a new vertex into the graph.
